@@ -30,12 +30,16 @@ app.get('/', (req, res) => {
     if (!req.session.shoppingcart) {
         req.session.shoppingcart = new ShoppingCart().serialize();
     }
-    res.render('index', books_db);
+    res.render('index', {books_db});
 });
 
 // "add" button is pressed to add to ShoppingCart
 app.post('/add', (req, res) => {
-    const book_id = req.body.id;
+	const book_id = req.body.id;
+	if (!book_id) {
+		// for some reason, not came via "add" button of index.ejs
+		res.redirect('/');
+	}
     if (!req.session.shoppingcart) {
         req.session.shoppingcart = new ShoppingCart().serialize();
     }
@@ -56,8 +60,8 @@ app.get('/checkout', (req, res) => {
         const shoppingcart = ShoppingCart.deserialize(req.session.shoppingcart);
         message = `Send $${shoppingcart.totalPrice.toFixed(2)}
             to Dr. Sung immediately!<br>
-            Cash only please!
-            The books will be delivered March 1, 2030`;
+            Cash only please!<br>
+            Your order will be delivered no earlier than March 1, 2030`;
     }
     res.send(`<h1>${message}</h1>`);
 });
