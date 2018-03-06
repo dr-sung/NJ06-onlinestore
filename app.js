@@ -12,7 +12,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(session({
 	secret: 'mysecretkey',
 	resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
         maxAge: 60*60*1000, // unit: ms, if inactive, session expires in 1 hour
         path: '/'
